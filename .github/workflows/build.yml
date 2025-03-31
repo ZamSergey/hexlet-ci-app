@@ -8,11 +8,18 @@ jobs:
   build:
     # операционная система для работы воркфлоу
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
     steps:
       # Клонируем репозиторий
       - uses: actions/checkout@v4
+      - name: Use Node.js ${{ matrix.node-version }}
       # Устанавливаем Node.js
-      - uses: actions/setup-node@v4
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
       # Ставим зависимости
       - run: make setup
       # Запускаем линтер
@@ -22,3 +29,4 @@ jobs:
       # имя выводится на Github при просмотре сборки
       - name: run tests
         run: make test
+      - uses: hexlet-components/hello-from-hexlet-action@release  
